@@ -20,6 +20,7 @@ class XShapedView(ctx:Context):View(ctx) {
         return true
     }
     data class XShaped(var x:Float,var y:Float,var size:Float) {
+        val state = State()
         fun draw(canvas:Canvas,paint:Paint) {
             paint.strokeCap = Paint.Cap.ROUND
             paint.strokeWidth = size/30
@@ -32,7 +33,7 @@ class XShapedView(ctx:Context):View(ctx) {
                 for(j in 0..1) {
                     canvas.save()
                     canvas.translate(0f,-size+j*size/2)
-                    canvas.rotate(90f)
+                    canvas.rotate(90f*state.scale)
                     canvas.drawLine(0f,0f,size/2,0f,paint)
                     canvas.restore()
                 }
@@ -41,10 +42,10 @@ class XShapedView(ctx:Context):View(ctx) {
             canvas.restore()
         }
         fun update(stopcb:(Float)->Unit) {
-
+            state.update(stopcb)
         }
         fun startUpdating(startcb:()->Unit) {
-
+            state.startUpdating(startcb)
         }
     }
     data class State(var scale:Float = 0f,var dir:Float = 0f,var prevScale:Float = 0f) {
