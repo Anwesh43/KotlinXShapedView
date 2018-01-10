@@ -26,7 +26,7 @@ class XShapedView(ctx:Context):View(ctx) {
         fun draw(canvas:Canvas,paint:Paint) {
             paint.strokeCap = Paint.Cap.ROUND
             paint.strokeWidth = size/30
-            paint.color = Color.parseColor("#AD1457")
+            paint.color = Color.parseColor("#512DA8")
             canvas.save()
             canvas.translate(x,y)
             for (i in 0..3) {
@@ -99,7 +99,7 @@ class XShapedView(ctx:Context):View(ctx) {
             if(time == 0) {
                 val w = canvas.width.toFloat()
                 val h = canvas.height.toFloat()
-                xShaped = XShaped(w/2,h/2,2*w/5)
+                xShaped = XShaped(w/2,h/2,w/2)
             }
             canvas.drawColor(Color.parseColor("#212121"))
             xShaped?.draw(canvas,paint)
