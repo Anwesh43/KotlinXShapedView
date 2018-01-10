@@ -12,7 +12,7 @@ class XShapedView(ctx:Context):View(ctx) {
 
     }
     override fun onTouchEvent(event:MotionEvent):Boolean {
-        when(event.action) {
+        when (event.action) {
             MotionEvent.ACTION_DOWN -> {
 
             }
@@ -27,10 +27,10 @@ class XShapedView(ctx:Context):View(ctx) {
             paint.color = Color.parseColor("#AD1457")
             canvas.save()
             canvas.translate(x,y)
-            for(i in 0..3) {
+            for (i in 0..3) {
                 canvas.save()
                 canvas.rotate(i*90f+45f)
-                for(j in 0..1) {
+                for (j in 0..1) {
                     canvas.save()
                     canvas.translate(0f,-size+j*size/2)
                     canvas.rotate(90f*state.scale)
@@ -51,7 +51,7 @@ class XShapedView(ctx:Context):View(ctx) {
     data class State(var scale:Float = 0f,var dir:Float = 0f,var prevScale:Float = 0f) {
         fun update(stopcb:(Float)->Unit) {
             scale += 0.1f*dir
-            if(Math.abs(scale - prevScale) > 1) {
+            if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
                 prevScale = scale
@@ -59,9 +59,34 @@ class XShapedView(ctx:Context):View(ctx) {
             }
         }
         fun startUpdating(startcb:()->Unit) {
-            if(dir == 0f) {
+            if (dir == 0f) {
                 dir = 1-2*scale
                 startcb()
+            }
+        }
+    }
+    data class Animator(var view:XShapedView,var animated:Boolean = false) {
+        fun animate(updatecb:()->Unit) {
+            if (animated) {
+                updatecb()
+                try {
+                    Thread.sleep(50)
+                    view.invalidate()
+                }
+                catch(ex:Exception) {
+
+                }
+            }
+        }
+        fun stop() {
+            if (animated) {
+                animated = false
+            }
+        }
+        fun startAnimation() {
+            if (!animated) {
+                animated = true
+                view.postInvalidate()
             }
         }
     }
