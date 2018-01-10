@@ -10,6 +10,7 @@ import android.graphics.*
 class XShapedView(ctx:Context):View(ctx) {
     val paint:Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     val renderer = Renderer(this)
+    var onXShapeListener:OnXShapeListener ?= null
     override fun onDraw(canvas:Canvas) {
         renderer.render(canvas,paint)
     }
@@ -20,6 +21,9 @@ class XShapedView(ctx:Context):View(ctx) {
             }
         }
         return true
+    }
+    fun addOnXShapeListener(onOpenListener: () -> Unit,onCloseListener: () -> Unit) {
+        onXShapeListener = OnXShapeListener(onOpenListener,onCloseListener)
     }
     data class XShaped(var x:Float,var y:Float,var size:Float) {
         val state = State()
@@ -107,6 +111,10 @@ class XShapedView(ctx:Context):View(ctx) {
             animator.animate{
                 xShaped?.update{
                     animator.stop()
+                    when(it) {
+                        0f -> view.onXShapeListener?.onOpenListener?.invoke()
+                        1f -> view.onXShapeListener?.onCloseListener?.invoke()
+                    }
                 }
             }
         }
@@ -123,4 +131,5 @@ class XShapedView(ctx:Context):View(ctx) {
             return view
         }
     }
+    data class OnXShapeListener(var onOpenListener:()->Unit,var onCloseListener:()->Unit)
 }
