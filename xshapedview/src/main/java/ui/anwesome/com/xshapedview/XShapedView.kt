@@ -90,4 +90,28 @@ class XShapedView(ctx:Context):View(ctx) {
             }
         }
     }
+    data class Renderer(var view:XShapedView,var time:Int = 0) {
+        val animator = Animator(view)
+        var xShaped:XShaped?=null
+        fun render(canvas:Canvas,paint:Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                xShaped = XShaped(w/2,h/2,2*w/5)
+            }
+            canvas.drawColor(Color.parseColor("#212121"))
+            xShaped?.draw(canvas,paint)
+            time++
+            animator.animate{
+                xShaped?.update{
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            xShaped?.startUpdating{
+                animator.startAnimation()
+            }
+        }
+    }
 }
