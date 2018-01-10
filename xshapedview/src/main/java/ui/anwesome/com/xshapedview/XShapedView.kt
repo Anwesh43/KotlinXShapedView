@@ -3,6 +3,7 @@ package ui.anwesome.com.xshapedview
 /**
  * Created by anweshmishra on 11/01/18.
  */
+import android.app.Activity
 import android.view.*
 import android.content.*
 import android.graphics.*
@@ -113,6 +114,13 @@ class XShapedView(ctx:Context):View(ctx) {
             xShaped?.startUpdating{
                 animator.startAnimation()
             }
+        }
+    }
+    companion object {
+        fun create(activity:Activity):XShapedView {
+            val view = XShapedView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
